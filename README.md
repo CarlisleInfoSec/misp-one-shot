@@ -1,8 +1,8 @@
 # MISP One‑Shot Installer 🚀
 
-This project provides a **single script** to go from a clean Debian 13 host to a fully functional [MISP](https://www.misp-project.org/) instance — LAN‑accessible, plugin‑ready, and snapshot‑safe.
+A single script to go from a **fresh Debian 13 host** to a fully functional [MISP](https://www.misp-project.org/) instance — LAN‑accessible, plugin‑ready, and snapshot‑safe.
 
-## Features
+This installer automates the entire process:
 - Installs all required packages (including `ed` for safe PHP injection)
 - Configures MariaDB with a dedicated `misp` user
 - Injects `MysqlObserverExtended` datasource into `database.php` without syntax errors
@@ -13,25 +13,20 @@ This project provides a **single script** to go from a clean Debian 13 host to a
 - Runs initial MISP update tasks
 - Leaves you with a reproducible, snapshot‑ready baseline
 
-## Quick Start
+---
+
+## 📋 Requirements
+
+- Fresh **Debian 13** install
+- Root or sudo privileges
+- Internet access for package installation
+
+---
+
+## ⚡ Quick Start
 
 ```bash
 git clone https://github.com/YOURUSERNAME/misp-one-shot.git
 cd misp-one-shot
 chmod +x misp_install.sh
 sudo ./misp_install.sh
-```
-
-Once complete, access MISP at:
-http://<your-server-ip>/
-
-Default login:
-admin@admin.test / admin
-
-Requirements
-
-    Fresh Debian 13 install
-
-    Root or sudo privileges
-
-    Internet access for package installation
