@@ -76,6 +76,34 @@ misp-one-shot/
 ```
 
 ---
+---
+
+## 📷 Screenshot
+
+![MISP Login Page](docs/images/misp-login.png)  
+*Example of the MISP login screen after a successful install.*
+
+---
+
+## 🧪 Tested On
+
+| Component   | Version / Commit |
+|-------------|------------------|
+| Debian      | 13 (Bookworm)    |
+| MISP        | 2.4.x (commit abc1234) |
+| PHP         | 8.x              |
+| MariaDB     | 10.x             |
+
+---
+
+## 🆕 What's New
+
+- **Version‑proof schema upgrade** — automatically detects and runs the right DB migration command for your MISP version.
+- **Optional flags**:
+  - `--no-apache` — skip Apache install/config
+  - `--no-db` — skip MariaDB install/config
+  - `--dry-run` — print actions without executing
+
 
 ## 🤝 Contributing
 
