@@ -1,32 +1,63 @@
-# MISP One‑Shot Installer 🚀
+# Post‑Install Checklist ✅
 
-A single script to go from a **fresh Debian 13 host** to a fully functional [MISP](https://www.misp-project.org/) instance — LAN‑accessible, plugin‑ready, and snapshot‑safe.
-
-This installer automates the entire process:
-- Installs all required packages (including `ed` for safe PHP injection)
-- Configures MariaDB with a dedicated `misp` user
-- Injects `MysqlObserverExtended` datasource into `database.php` without syntax errors
-- Disables `SysLogLogable` until after DB updates to prevent migration crashes
-- Creates cache directories with correct permissions
-- Configures Apache to serve MISP at the server’s IP (no `/MISP` path)
-- Disables the default Apache site so you don’t see the Debian placeholder page
-- Runs initial MISP update tasks
-- Leaves you with a reproducible, snapshot‑ready baseline
+Follow this checklist after running `misp_install.sh` to confirm your MISP instance is healthy and ready for use.
 
 ---
 
-## 📋 Requirements
-
-- Fresh **Debian 13** install
-- Root or sudo privileges
-- Internet access for package installation
+## 1. Web UI Access
+- Open a browser and go to:
+  ```
+  http://<your-server-ip>/
+  ```
+- Log in with:
+  ```
+  admin@admin.test / admin
+  ```
+- Change the default password immediately under **Administration → List Users**.
 
 ---
 
-## ⚡ Quick Start
+## 2. Server Settings & Maintenance
+- Navigate to **Administration → Server Settings & Maintenance**.
+- Confirm all indicators are **green**.
+- If any are red/orange:
+  - Click the setting name for guidance.
+  - Apply the recommended fix.
+  - Refresh the page to confirm the change.
+
+---
+
+## 3. Update Core Data
+Run these commands to ensure your instance has the latest definitions:
 
 ```bash
-git clone https://github.com/YOURUSERNAME/misp-one-shot.git
-cd misp-one-shot
-chmod +x misp_install.sh
-sudo ./misp_install.sh
+sudo -u www-data /var/www/MISP/app/Console/cake Admin updateWarningLists
+sudo -u www-data /var/www/MISP/app/Console/cake Admin updateTaxonomies
+sudo -u www-data /var/www/MISP/app/Console/cake Admin updateJSON
+```
+
+---
+
+## 4. Enable Plugins
+- Go to **Administration → Plugin Settings**.
+- Enable any plugins you need (e.g., `SysLogLogable` should now work without DB errors).
+- Save changes and reload the page.
+
+---
+
+## 5. Snapshot for Rollback Safety
+If running in a VM or container:
+- Shut down the instance cleanly.
+- Take a snapshot or image.
+- Label it clearly (e.g., `MISP_Deb13_CleanInstall_YYYYMMDD`).
+
+---
+
+## 6. Optional Hardening
+- Configure HTTPS with a valid TLS certificate.
+- Restrict access to trusted IP ranges.
+- Set up regular backups for the database and `/var/www/MISP`.
+
+---
+
+Your MISP instance is now ready for production or lab use.
