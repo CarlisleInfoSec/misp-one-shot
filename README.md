@@ -1,63 +1,109 @@
-# Post‑Install Checklist ✅
+# MISP One‑Shot Installer 🚀
 
-Follow this checklist after running `misp_install.sh` to confirm your MISP instance is healthy and ready for use.
+A single script to go from a **fresh Debian 13 host** to a fully functional [MISP](https://www.misp-project.org/) instance — LAN‑accessible, plugin‑ready, and snapshot‑safe.
 
----
-
-## 1. Web UI Access
-- Open a browser and go to:
-  ```
-  http://<your-server-ip>/
-  ```
-- Log in with:
-  ```
-  admin@admin.test / admin
-  ```
-- Change the default password immediately under **Administration → List Users**.
-
----
-
-## 2. Server Settings & Maintenance
-- Navigate to **Administration → Server Settings & Maintenance**.
-- Confirm all indicators are **green**.
-- If any are red/orange:
-  - Click the setting name for guidance.
-  - Apply the recommended fix.
-  - Refresh the page to confirm the change.
+This installer automates the entire process:
+- Installs all required packages (including `ed` for safe PHP injection)
+- Configures MariaDB with a dedicated `misp` user
+- Injects `MysqlObserverExtended` datasource into `database.php` without syntax errors
+- Disables `SysLogLogable` until after DB updates to prevent migration crashes
+- Creates cache directories with correct permissions
+- Configures Apache to serve MISP at the server’s IP (no `/MISP` path)
+- Disables the default Apache site so you don’t see the Debian placeholder page
+- Runs schema migrations to match the current MISP code
+- Runs initial MISP update tasks
+- Leaves you with a reproducible, snapshot‑ready baseline
 
 ---
 
-## 3. Update Core Data
-Run these commands to ensure your instance has the latest definitions:
+## 📋 Requirements
+
+- Fresh **Debian 13** install
+- Root or sudo privileges
+- Internet access for package installation
+
+---
+
+## ⚡ Quick Start
 
 ```bash
-sudo -u www-data /var/www/MISP/app/Console/cake Admin updateWarningLists
-sudo -u www-data /var/www/MISP/app/Console/cake Admin updateTaxonomies
-sudo -u www-data /var/www/MISP/app/Console/cake Admin updateJSON
+git clone https://github.com/YOURUSERNAME/misp-one-shot.git
+cd misp-one-shot
+chmod +x misp_install.sh
+sudo ./misp_install.sh
+```
+
+When the script finishes, access MISP at:
+
+```
+http://<your-server-ip>/
+```
+
+Default login:
+```
+admin@admin.test / admin
 ```
 
 ---
 
-## 4. Enable Plugins
-- Go to **Administration → Plugin Settings**.
-- Enable any plugins you need (e.g., `SysLogLogable` should now work without DB errors).
-- Save changes and reload the page.
+## 🛠 Post‑Install Checklist
+
+After logging in:
+
+1. Go to **Administration → Server Settings & Maintenance**
+2. Confirm all indicators are green
+3. Update warning lists, taxonomies, and galaxies if needed:
+   ```bash
+   sudo -u www-data /var/www/MISP/app/Console/cake Admin updateWarningLists
+   sudo -u www-data /var/www/MISP/app/Console/cake Admin updateTaxonomies
+   sudo -u www-data /var/www/MISP/app/Console/cake Admin updateJSON
+   ```
+4. Take a VM snapshot for rollback safety
 
 ---
 
-## 5. Snapshot for Rollback Safety
-If running in a VM or container:
-- Shut down the instance cleanly.
-- Take a snapshot or image.
-- Label it clearly (e.g., `MISP_Deb13_CleanInstall_YYYYMMDD`).
+## 📂 Project Structure
+
+```
+misp-one-shot/
+├── misp_install.sh           # Main installer script
+├── README.md                 # This file
+├── LICENSE                   # MIT License
+└── docs/
+    ├── post_install_checklist.md
+    ├── troubleshooting.md
+    └── architecture_overview.md
+```
 
 ---
 
-## 6. Optional Hardening
-- Configure HTTPS with a valid TLS certificate.
-- Restrict access to trusted IP ranges.
-- Set up regular backups for the database and `/var/www/MISP`.
+## 🤝 Contributing
+
+Pull requests are welcome!  
+If you find a bug or want to add a feature, open an issue first to discuss what you’d like to change.
 
 ---
 
-Your MISP instance is now ready for production or lab use.
+## 📜 License
+
+MIT License
+
+Copyright (c) 2025 YOUR NAME
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights  
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell  
+copies of the Software, and to permit persons to whom the Software is  
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in  
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR  
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,  
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE  
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER  
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,  
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN  
+THE SOFTWARE.
