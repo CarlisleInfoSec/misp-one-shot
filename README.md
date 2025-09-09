@@ -20,3 +20,18 @@ git clone https://github.com/YOURUSERNAME/misp-one-shot.git
 cd misp-one-shot
 chmod +x misp_install.sh
 sudo ./misp_install.sh
+```
+
+Once complete, access MISP at:
+http://<your-server-ip>/
+
+Default login:
+admin@admin.test / admin
+
+Requirements
+
+    Fresh Debian 13 install
+
+    Root or sudo privileges
+
+    Internet access for package installation
